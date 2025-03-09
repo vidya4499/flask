@@ -1,3 +1,4 @@
+language: python
 targets:
   - os: ubuntu
     versions: ["22.04"]
