@@ -1,29 +1,27 @@
 name: flask-packager
 version: 1.0.0
+
 build:
   dependencies:
-    # Ruby and Bundler for Packager.io
-    - ruby-full
+    - ruby3.1.4
+    - ruby3.1.4-dev
     - bundler
-    # Python3 for Flask app
     - python3
     - python3-pip
     - python3-venv
-    # Other required tools
-    - curl
-    - git
-    - make
   script:
-    # Update package lists (for Debian/Ubuntu-based distros)
     - apt-get update -y || yum update -y
-    # Install dependencies for Python and Flask app
+    - apt-get install -y software-properties-common
+    - add-apt-repository ppa:brightbox/ruby-ng -y
+    - apt-get update -y
+    - apt-get install -y ruby3.1.4 ruby3.1.4-dev bundler
+    - ruby -v  # Verify Ruby version
+    - gem install bundler
+    - bundler -v  # Verify Bundler installation
     - pip3 install --upgrade pip
     - pip3 install -r requirements.txt
-    # Set up Ruby and Bundler inside the Packager.io build
-    - gem install bundler
-    - bundler install
-    # Ensure correct permissions
     - chmod +x start.sh
+
 package:
   type: deb
   distro: ubuntu
@@ -34,3 +32,5 @@ package:
   script:
     - echo "Package built successfully!"
     - echo "Application is ready for deployment."
+
+buildpack: https://github.com/heroku/heroku-buildpack-python.git
